@@ -1,0 +1,117 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5">
+
+  <div class="row justify-content-center">
+
+    <div class="col-md-8 col-lg-6">
+
+      <div class="card shadow-lg border-0">
+
+        <div class="card-body p-4">
+
+          <h3 class="text-center mb-4 fw-bold">
+            Create New Listing
+          </h3>
+
+          <form
+            method="POST"
+            action="/listings"
+            enctype="multipart/form-data"
+          >
+
+            <!-- TITLE -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Title</label>
+              <input
+                name="listing[title]"
+                type="text"
+                class="form-control"
+                placeholder="Enter listing title"
+                required
+              >
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Description</label>
+              <textarea
+                name="listing[description]"
+                class="form-control"
+                rows="3"
+                placeholder="Enter description"
+                required
+              ></textarea>
+            </div>
+
+            <!-- IMAGE -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">
+                Upload Listing Image(In Jpeg, Png, Jpg format only)
+              </label>
+              <input type="file" name="image" class="form-control" required>
+            </div>
+
+            <!-- PRICE -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Price (₹)</label>
+              <input
+                name="listing[price]"
+                type="number"
+                class="form-control"
+                placeholder="Enter price"
+                required
+              >
+            </div>
+            <!-- dropdown -->
+             <div class="dropdown">
+              <b>Select Category</b>
+               <select name="listing[category]" class="form-select mb-3" required>
+                 <option value="Homes">Homes</option>
+                 <option value="Trending">Trending</option>
+                 <option value="Mountains">Mountains</option>
+                 <option value="Beachfront">Beachfront</option>
+</select>
+
+            <!-- COUNTRY -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Country</label>
+              <input
+                name="listing[country]"
+                type="text"
+                class="form-control"
+                placeholder="Enter country"
+                required
+              >
+            </div>
+
+            <!-- LOCATION -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Location</label>
+              <input
+                name="listing[location]"
+                type="text"
+                class="form-control"
+                placeholder="Enter location"
+                required
+              >
+            </div>
+
+            <!-- BUTTON -->
+            <div class="d-grid">
+              <button class="btn btn-dark btn-lg">
+                ➕ Add Listing
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

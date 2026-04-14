@@ -1,0 +1,36 @@
+<% if (success && success.length) { %>
+ 
+  <div id="successAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+    <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+    <%= success[0] %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>
+
+<% if (error && error.length) { %>
+  <div id="errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+    <%= error[0] %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% } %>
+
+
+<script>
+  setTimeout(() => {
+    const successAlert = document.getElementById('successAlert');
+    const errorAlert = document.getElementById('errorAlert');
+
+    if (successAlert) {
+      successAlert.classList.remove('show');
+      successAlert.classList.add('fade');
+      setTimeout(() => successAlert.remove(), 300);
+    }
+
+    if (errorAlert) {
+      errorAlert.classList.remove('show');
+      errorAlert.classList.add('fade');
+      setTimeout(() => errorAlert.remove(), 300);
+    }
+  }, 300);
+</script>
