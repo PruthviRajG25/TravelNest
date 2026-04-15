@@ -26,7 +26,7 @@ const userRoutes = require("./routes/user");
 // ===============================
 // DATABASE CONNECTION
 // ===============================
-const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/travelnest";
+const dbUrl = process.env.ATLASDB_URL|| "mongodb://localhost:27017/wanderlust1";
 
 mongoose.connect(dbUrl)
   .then(() => console.log("Database connected successfully"))
