@@ -1,0 +1,185 @@
+<% layout("layouts/boilerplate") %>
+
+<% 
+  let avgRating = 0;
+  if(listing.reviews && listing.reviews.length > 0) {
+    let sum = listing.reviews.reduce((acc, rev) => acc + rev.rating, 0);
+    avgRating = (sum / listing.reviews.length).toFixed(1);
+  }
+%>
+
+<div class="row mt-3 justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+        <h3 class="fw-bold mb-3"><%= listing.title %></h3>
+    </div>
+
+    <div class="col-12 col-md-10 col-lg-8">
+        <div class="card show-card border-0 shadow-sm mb-4">
+            <img src="<%= listing.image.url %>" class="card-img-top show-img img-fluid rounded-4" 
+                 alt="listing_image" style="max-height: 500px; object-fit: cover;">
+            <div class="card-body px-0">
+                <p class="card-text text-muted">Hosted by <b><%= listing.owner ? listing.owner.username : "TravelNest" %></b></p>
+                <hr>
+                <p class="card-text lead"><%= listing.description %></p>
+                <p class="h4 fw-bold text-danger">&#8377; <%= listing.price.toLocaleString("en-IN") %> / night</p>
+                <p class="card-text"><i class="fa-solid fa-location-dot me-2"></i><%= listing.location %>, <%= listing.country %></p>
+            </div>
+        </div>
+    </div>
+
+    <% if(currentUser && listing.owner && listing.owner._id.equals(currentUser._id)) { %>
+    <div class="col-12 col-md-10 col-lg-8 mb-4">
+        <div class="d-flex gap-3">
+            <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark px-4 rounded-pill text-decoration-none">✏️ Edit</a>
+            <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+                <button class="btn btn-outline-danger px-4 rounded-pill">🗑️ Delete</button>
+            </form>
+        </div>
+    </div>
+    <% } %>
+
+    <% if(listing.wifiSpeed > 0) { %>
+    <div class="col-12 col-md-10 col-lg-8 mb-4">
+        <div class="card border-success bg-light bg-opacity-10 rounded-4">
+            <div class="card-body d-flex align-items-center">
+                <i class="fa-solid fa-wifi text-success fs-3 me-3"></i>
+                <div>
+                    <h6 class="card-title mb-0 fw-bold">Verified Digital Nomad Workspace</h6>
+                    <p class="card-text text-muted mb-0"><%= listing.wifiSpeed %> Mbps Download Speed</p>
+                    <% if(listing.wifiScreenshot && listing.wifiScreenshot.url) { %>
+                        <small><a href="<%= listing.wifiScreenshot.url %>" target="_blank" class="text-success text-decoration-none">View Speedtest Proof</a></small>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+    <div class="col-12 col-md-10 col-lg-8 mb-5">
+        <div class="p-4 border rounded-4 shadow-sm bg-white">
+            <h4 class="mb-3">Reserve your stay</h4>
+            <form method="POST" action="/listings/<%= listing._id %>/book" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="bookingDateTime" class="form-label text-muted">Arrival Date & Time</label>
+                    <input type="datetime-local" id="bookingDateTime" name="bookingDateTime" class="form-control form-control-lg" required>
+                    <div class="invalid-feedback">Please choose your check-in time.</div>
+                </div>
+                <button class="btn btn-danger w-100 py-3 rounded-pill fw-bold fs-5 shadow">
+                    <i class="fa-solid fa-calendar-check me-2"></i> Book Now
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <hr class="col-12 col-md-10 col-lg-8">
+
+    <div class="col-12 col-md-10 col-lg-8 mt-4">
+        <% if(currentUser) { %>
+        <h4 class="fw-bold">How was your stay?</h4>
+        <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation mb-5">
+            <div class="mb-3 mt-3">
+                <label class="form-label">Rate your experience</label>
+                <fieldset class="starability-grow">
+                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked />
+                    <input type="radio" id="r1" name="review[rating]" value="1" /><label for="r1">1 star</label>
+                    <input type="radio" id="r2" name="review[rating]" value="2" /><label for="r2">2 stars</label>
+                    <input type="radio" id="r3" name="review[rating]" value="3" /><label for="r3">3 stars</label>
+                    <input type="radio" id="r4" name="review[rating]" value="4" /><label for="r4">4 stars</label>
+                    <input type="radio" id="r5" name="review[rating]" value="5" /><label for="r5">5 stars</label>
+                </fieldset>
+            </div>
+            <div class="mb-3">
+                <label for="comment" class="form-label">Review Details</label>
+                <textarea name="review[comment]" id="comment" rows="4" class="form-control rounded-3" placeholder="Tell us about the home, host, and area..." required></textarea>
+                <div class="invalid-feedback">Please add a comment before submitting.</div>
+            </div>
+            <button class="btn btn-outline-dark rounded-pill px-4">Post Review</button>
+        </form>
+        <hr>
+        <% } %>
+
+        <% if(listing.reviews && listing.reviews.length > 0) { %>
+        <div class="row align-items-center mb-4">
+            <div class="col-auto">
+                <h1 class="display-4 fw-bold mb-0"><%= avgRating %></h1>
+            </div>
+            <div class="col">
+                <div>
+                    <% for(let i=1; i<=5; i++) { %>
+                        <i class="fa-<%= i <= Math.round(avgRating) ? 'solid' : 'regular' %> fa-star text-danger"></i>
+                    <% } %>
+                    <span class="text-muted ms-2">(<%= listing.reviews.length %> Reviews)</span>
+                </div>
+                <p class="mb-0 text-success fw-bold"><i class="fa-solid fa-medal me-1"></i> Guest Favorite</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <% for(review of listing.reviews) { %>
+            <div class="col-12 col-md-6 mb-3">
+                <div class="card h-100 rounded-3 p-2 shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold">@<%= review.author ? review.author.username : "User" %></h6>
+                        <p class="starability-result" data-rating="<%= review.rating %>"></p>
+                        <p class="card-text text-muted small"><%= review.comment %></p>
+                        <% if(currentUser && review.author && review.author._id.equals(currentUser._id)) { %>
+                        <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                            <button class="btn btn-sm btn-link text-danger p-0 text-decoration-none">Delete Review</button>
+                        </form>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <% } else { %>
+            <p class="text-muted italic">No reviews yet. Be the first to share your experience!</p>
+        <% } %>
+    </div>
+
+    <div class="col-12 col-md-10 col-lg-8 my-5">
+        <hr>
+        <h3 class="fw-bold mb-3">Where you'll be</h3>
+        <div id="map" class="shadow-sm border" style="height: 400px; width: 100%; border-radius: 1.5rem;"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Form Validation Logic
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+
+        // Map Initialization Logic
+        const mapDiv = document.getElementById('map');
+        const coords = <%- JSON.stringify(listing.geometry.coordinates) %>;
+        
+        if (mapDiv && coords && coords.length === 2) {
+            // Leaflet needs [Lat, Lng]
+            const mapCoords = [coords[1], coords[0]]; 
+            
+            let map = L.map('map').setView(mapCoords, 12); 
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            L.marker(mapCoords).addTo(map)
+                .bindPopup("<b><%= listing.location %></b><br>Exact location shared after booking.")
+                .openPopup();
+            
+            // Fix: InvalidateSize ensures tiles load correctly if container resized
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 500);
+        }
+    });
+</script>

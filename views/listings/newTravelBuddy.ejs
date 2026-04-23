@@ -1,0 +1,150 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+  .form-highlight {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+  }
+  .buddy-form-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .form-section {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+  }
+  .form-icon {
+    color: #007bff;
+    margin-right: 0.5rem;
+  }
+</style>
+
+<div class="form-highlight">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10 text-center">
+        <h1 class="display-4 mb-3"><i class="fa-solid fa-users"></i> Create Travel Buddy Request</h1>
+        <p class="lead">Find companions for your next adventure and make travel safer and more fun!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+      <div class="buddy-form-card card">
+        <div class="card-body p-0">
+          <form action="/listings/travel-buddies" method="POST" novalidate class="needs-validation">
+            
+            <div class="form-section">
+              <h4 class="mb-4 text-center"><i class="fa-solid fa-map form-icon"></i>Destination & Travel Details</h4>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="destination" class="form-label fw-bold">
+                    <i class="fa-solid fa-location-dot form-icon"></i>Destination
+                  </label>
+                  <input type="text" id="destination" name="destination" class="form-control form-control-lg" 
+                         placeholder="e.g., Paris, France" required>
+                  <div class="invalid-feedback">Please enter a destination.</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="maxCompanions" class="form-label fw-bold">
+                    <i class="fa-solid fa-users form-icon"></i>Max Companions
+                  </label>
+                  <select id="maxCompanions" name="maxCompanions" class="form-control form-control-lg" required>
+                    <option value="1">1 companion</option>
+                    <option value="2">2 companions</option>
+                    <option value="3">3 companions</option>
+                    <option value="4">4 companions</option>
+                    <option value="5">5 companions</option>
+                  </select>
+                  <div class="invalid-feedback">Please select max companions.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4 class="mb-4 text-center"><i class="fa-solid fa-calendar form-icon"></i>Travel Dates</h4>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="startDate" class="form-label fw-bold">
+                    <i class="fa-solid fa-plane-departure form-icon"></i>Start Date
+                  </label>
+                  <input type="date" id="startDate" name="startDate" class="form-control form-control-lg" required>
+                  <div class="invalid-feedback">Please select a start date.</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="endDate" class="form-label fw-bold">
+                    <i class="fa-solid fa-plane-arrival form-icon"></i>End Date
+                  </label>
+                  <input type="date" id="endDate" name="endDate" class="form-control form-control-lg" required>
+                  <div class="invalid-feedback">Please select an end date.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h4 class="mb-4 text-center"><i class="fa-solid fa-comment form-icon"></i>Tell Us About Your Trip</h4>
+              <div class="mb-3">
+                <label for="description" class="form-label fw-bold">
+                  <i class="fa-solid fa-info-circle form-icon"></i>Description
+                </label>
+                <textarea id="description" name="description" class="form-control form-control-lg" rows="5" 
+                          placeholder="Describe your travel plans, interests, and what kind of travel buddies you're looking for..." required></textarea>
+                <div class="invalid-feedback">Please provide a description of your trip.</div>
+                <div class="form-text">Be specific about your interests, budget, accommodation preferences, and what you hope to experience.</div>
+              </div>
+            </div>
+
+            <div class="p-4 bg-light">
+              <div class="d-grid">
+                <button class="btn btn-primary btn-lg">
+                  <i class="fa-solid fa-paper-plane"></i> Create Travel Buddy Request
+                </button>
+              </div>
+              <div class="text-center mt-3">
+                <a href="/listings/travel-buddies" class="btn btn-outline-secondary">
+                  <i class="fa-solid fa-arrow-left"></i> Back to Travel Buddies
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Enable client-side validation
+  (function () {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  })();
+
+  // Set minimum date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('startDate').setAttribute('min', today);
+  document.getElementById('endDate').setAttribute('min', today);
+
+  // Ensure end date is after start date
+  document.getElementById('startDate').addEventListener('change', function() {
+    document.getElementById('endDate').setAttribute('min', this.value);
+  });
+</script>

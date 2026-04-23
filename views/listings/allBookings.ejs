@@ -1,0 +1,27 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row mt-3">
+  <div class="col-lg-8 col-md-10 col-sm-12 offset-lg-2 offset-md-1">
+    <h2>Your Bookings</h2>
+    <% if (allBookings.length === 0) { %>
+      <div class="alert alert-info">You have no bookings yet.</div>
+      <a href="/listings" class="btn btn-primary">Browse Listings</a>
+    <% } else { %>
+      <div class="list-group">
+        <% allBookings.forEach(booking => { %>
+          <div class="list-group-item mb-3">
+            <h5><a href="/listings/<%= booking.listing._id %>"><%= booking.listing.title %></a></h5>
+            <p class="mb-1"><strong>Location:</strong> <%= booking.listing.location %>, <%= booking.listing.country %></p>
+            <p class="mb-1"><strong>Booked for:</strong> <%= new Date(booking.bookingDateTime).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) %></p>
+            <p class="mb-0 text-muted"><strong>Confirmed on:</strong> <%= new Date(booking.bookedAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) %></p>
+            <p><b>Complete your payment in cash/UPI at listing location</b></p>
+            <form method="POST" action="/listings/bookings/<%= booking._id %>?_method=DELETE" onsubmit="return confirm('Are you sure you want to cancel this booking?');" class="d-inline">
+              <button class="btn btn-danger btn-sm">Cancel Booking</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+      <a href="/listings" class="btn btn-dark mt-3">Back to Listings</a>
+    <% } %>
+  </div>
+</div>

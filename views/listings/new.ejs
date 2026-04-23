@@ -1,0 +1,148 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+          <h3 class="text-center mb-4 fw-bold">
+            Create New Listing
+          </h3>
+
+          <form
+            method="POST"
+            action="/listings"
+            enctype="multipart/form-data"
+            class="needs-validation"
+            novalidate
+          >
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Title</label>
+              <input
+                name="listing[title]"
+                type="text"
+                class="form-control"
+                placeholder="Enter listing title"
+                required
+              >
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Description</label>
+              <textarea
+                name="listing[description]"
+                class="form-control"
+                rows="3"
+                placeholder="Enter description"
+                required
+              ></textarea>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">
+                Upload Listing Image (Jpeg, Png, Jpg only)
+              </label>
+              <input type="file" name="image" class="form-control" required>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Price (₹)</label>
+                <input
+                  name="listing[price]"
+                  type="number"
+                  class="form-control"
+                  placeholder="Enter price"
+                  required
+                >
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Select Category</label>
+                <select name="listing[category]" class="form-select" required>
+                  <option value="Homes">Homes</option>
+                  <option value="Trending">Trending</option>
+                  <option value="Mountains">Mountains</option>
+                  <option value="Beachfront">Beachfront</option>
+                  
+                </select>
+              </div>
+            </div>
+
+            <div class="card mb-4 p-3 border-success bg-light shadow-sm">
+              <h5 class="fw-bold text-success mb-3">
+                <i class="fa-solid fa-wifi"></i> WiFi Verification (Optional)
+              </h5>
+              <div class="row">
+                <div class="col-md-6 mb-2">
+                  <label class="form-label small fw-semibold">Speed (Mbps)</label>
+                  <input
+                    name="listing[wifiSpeed]"
+                    type="number"
+                    class="form-control"
+                    placeholder="e.g. 100"
+                  >
+                </div>
+                <div class="col-md-6 mb-2">
+                  <label class="form-label small fw-semibold">Speed Test Proof</label>
+                  <input name="wifiScreenshot" type="file" class="form-control">
+                </div>
+              </div>
+              <small class="text-muted mt-2">Uploading a screenshot adds a "Verified" badge to your listing.</small>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Country</label>
+                <input
+                  name="listing[country]"
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter country"
+                  required
+                >
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label class="form-label fw-semibold">Location</label>
+                <input
+                  name="listing[location]"
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter location"
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button class="btn btn-dark btn-lg">
+                ➕ Add Listing
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Bootstrap Starter JavaScript for disabling form submissions if there are invalid fields
+  (() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>

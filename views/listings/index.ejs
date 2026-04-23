@@ -1,0 +1,81 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+    #filters { display: flex; flex-wrap: nowrap; align-items: center; overflow-x: auto; padding: 1rem 0; }
+    #filters::-webkit-scrollbar { display: none; }
+    .filter { text-align: center; margin-right: 2rem; opacity: 0.7; transition: 0.2s; min-width: 80px; text-decoration: none; color: inherit; }
+    .filter:hover { opacity: 1; border-bottom: 2px solid #fe424d; cursor: pointer; }
+    .filter i { font-size: 1.2rem; }
+    .filter p { font-size: 0.8rem; margin: 0; }
+    .tax-info { display: none; color: #fe424d; font-weight: 600; }
+</style>
+
+<div id="filters">
+    <a href="/listings" class="filter">
+        <div><i class="fa-solid fa-border-all"></i></div>
+        <p>All</p>
+    </a>
+    <a href="/listings?category=Trending" class="filter">
+        <div><i class="fa-solid fa-fire"></i></div>
+        <p>Trending</p>
+    </a>
+    <a href="/listings?category=Homes" class="filter">
+        <div><i class="fa-solid fa-house"></i></div>
+        <p>Homes</p>
+    </a>
+    <a href="/listings?category=Mountains" class="filter">
+        <div><i class="fa-solid fa-mountain"></i></div>
+        <p>Mountains</p>
+    </a>
+    <a href="/listings?category=Beachfront" class="filter">
+        <div><i class="fa-solid fa-umbrella-beach"></i></div>
+        <p>Beachfront</p>
+    </a>
+    
+    <div class="tax-toggle ms-auto border p-2 rounded-3 shadow-sm d-flex align-items-center">
+        <div class="form-check-reverse form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+        </div>
+    </div>
+</div>
+
+<div class="row row-cols-xxl-4 row-cols-lg-3 row-cols-md-2 row-cols-1 mt-3">
+    <% for(let listing of allListings) { %>
+        <div class="col mb-4">
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+                <div class="card h-100 listing-card border-0 shadow-sm">
+                    <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 18rem; object-fit: cover;">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body p-2">
+                        <p class="card-text">
+                            <b><%= listing.title %></b><br>
+                            &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
+                                     <span class="tax-info"> 
+            &nbsp; <i class="text-muted">+18% GST </i> 
+            <b class="ms-1">Total=&#8377;  <%= (listing.price * 1.18).toLocaleString("en-IN") %></b>
+        </span>
+                        </p>
+               
+                    </div>
+                </div>
+            </a>
+        </div>
+    <% } %>
+</div>
+
+<script>
+    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+
+taxSwitch.addEventListener("click", () => {
+    let taxInfo = document.getElementsByClassName("tax-info");
+    
+    for (let info of taxInfo) {
+        if (info.style.display !== "inline") {
+            info.style.display = "inline";
+        } else {
+            info.style.display = "none";
+        }
+    }
+});
+</script>

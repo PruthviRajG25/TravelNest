@@ -1,0 +1,136 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+  .buddy-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid #e9ecef;
+  }
+  .buddy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: #007bff;
+  }
+  .status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.8rem;
+  }
+  .highlight-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+  }
+</style>
+
+<div class="highlight-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h1 class="display-4 mb-3"><i class="fa-solid fa-users"></i> Find Travel Buddies</h1>
+        <p class="lead">Connect with fellow travelers for safer, more enjoyable, and memorable trips</p>
+        <% if(currentUser) { %>
+          <a href="/listings/travel-buddies/new" class="btn btn-light btn-lg mt-3">
+            <i class="fa-solid fa-plus"></i> Post a Travel Buddy Request
+          </a>
+        <% } else { %>
+          <p class="mt-3">Sign up to start connecting with travel buddies!</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <% allBuddies.forEach(buddy => { %>
+      <div class="col-lg-6 col-md-8 col-sm-12 mb-4">
+        <div class="card buddy-card h-100 position-relative">
+          <% if(buddy.companions.length >= buddy.maxCompanions) { %>
+            <span class="badge bg-danger status-badge">Full</span>
+          <% } else if(buddy.companions.length > 0) { %>
+            <span class="badge bg-success status-badge">Active</span>
+          <% } else { %>
+            <span class="badge bg-primary status-badge">New</span>
+          <% } %>
+          
+          <div class="card-body">
+            <h5 class="card-title text-primary">
+              <i class="fa-solid fa-map-marker-alt"></i> <%= buddy.destination %>
+            </h5>
+            <p class="card-text mb-2">
+              <i class="fa-solid fa-user"></i> <strong>Organizer:</strong> <%= buddy.user.username %>
+            </p>
+            <p class="card-text mb-2">
+              <i class="fa-solid fa-calendar"></i> <strong>Dates:</strong> 
+              <%= new Date(buddy.startDate).toLocaleDateString('en-IN') %> - <%= new Date(buddy.endDate).toLocaleDateString('en-IN') %>
+            </p>
+            <p class="card-text mb-3">
+              <i class="fa-solid fa-info-circle"></i> <%= buddy.description %>
+            </p>
+            
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="badge bg-light text-dark">
+                <i class="fa-solid fa-users"></i> Companions: <%= buddy.companions.length %> / <%= buddy.maxCompanions %>
+              </span>
+            </div>
+            
+            <% if(buddy.companions.length > 0) { %>
+              <p class="card-text small text-muted mb-3">
+                <i class="fa-solid fa-user-friends"></i> <strong>Joined:</strong> <%= buddy.companions.map(c => c.username).join(', ') %>
+              </p>
+            <% } %>
+            
+            <% if(currentUser) { %>
+              <% if(buddy.user._id.equals(currentUser._id)) { %>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="alert alert-info small mb-0 flex-grow-1 me-2">
+                    <i class="fa-solid fa-star"></i> This is your travel request
+                  </div>
+                  <form method="POST" action="/listings/travel-buddies/<%= buddy._id %>?_method=DELETE" 
+                        onsubmit="return confirm('Are you sure you want to delete this travel buddy request?');" class="mb-0">
+                    <button class="btn btn-danger btn-sm">
+                      <i class="fa-solid fa-trash"></i> Delete
+                    </button>
+                  </form>
+                </div>
+              <% } else if(buddy.companions.some(c => c._id.equals(currentUser._id))) { %>
+                <div class="alert alert-success small mb-0">
+                  <i class="fa-solid fa-check"></i> You're already part of this trip!
+                </div>
+              <% } else if(buddy.companions.length >= buddy.maxCompanions) { %>
+                <div class="alert alert-warning small mb-0">
+                  <i class="fa-solid fa-times"></i> This trip is full
+                </div>
+              <% } else { %>
+                <form method="POST" action="/listings/travel-buddies/<%= buddy._id %>/join" class="mb-0">
+                  <button class="btn btn-success w-100">
+                    <i class="fa-solid fa-handshake"></i> Join This Trip
+                  </button>
+                </form>
+              <% } %>
+            <% } else { %>
+              <div class="alert alert-secondary small mb-0">
+                <i class="fa-solid fa-sign-in-alt"></i> Log in to join travel buddies
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <% if(allBuddies.length === 0) { %>
+    <div class="text-center py-5">
+      <i class="fa-solid fa-users fa-3x text-muted mb-3"></i>
+      <h3 class="text-muted">No travel buddy requests yet</h3>
+      <p class="text-muted">Be the first to post a travel buddy request and connect with fellow travelers!</p>
+      <% if(currentUser) { %>
+        <a href="/listings/travel-buddies/new" class="btn btn-primary btn-lg">
+          <i class="fa-solid fa-plus"></i> Create First Request
+        </a>
+      <% } %>
+    </div>
+  <% } %>
+</div>
