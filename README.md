@@ -19,8 +19,8 @@ I chose to develop TravelNest to tackle the complexity of **synchronizing third-
 This project allowed me to master asynchronous error handling and the nuances of state management in a serverless environment (Vercel).
 
 -----
-### Live Demo(use desktop mode while viewing in mobile)
-https://travel-nest-krqs.vercel.app/listings
+### Live Demo
+https://travel-nest-2kys.vercel.app/listings
 -----
 
 ## 🚀 Advanced Features (New Updates)
