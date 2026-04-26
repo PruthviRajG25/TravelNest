@@ -121,4 +121,4 @@ CLOUD_API_SECRET=your_secret
 ---
 
 ### 👨‍💻 Developed by Pruthvi Raj G
-*Aspiring Full-Stack Developer | Problem Solver | AI Enthusiast*
+* Web Developer | Problem Solver | AI Enthusiast*
