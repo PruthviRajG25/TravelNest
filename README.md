@@ -10,7 +10,7 @@ TravelNest is a sophisticated marketplace for global travel accommodations, buil
 
 ---
 
-## 🌟 Why I Built TravelNest
+## 🌟 Why I Built TravelNest?
 I chose to develop TravelNest to tackle the complexity of **synchronizing third-party services** in a single user flow. Unlike a simple CRUD app, this project required managing the "Triad of Data": 
 1. **Physical Reality:** Geocoding addresses into spatial coordinates.
 2. **Visual Reality:** Handling cloud-based media streams.
